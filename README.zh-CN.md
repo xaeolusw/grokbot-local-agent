@@ -119,3 +119,11 @@ echo "exit=$?"
 ## License
 
 [MIT](LICENSE)。
+
+## 本 fork 的改动：只用 OpenRouter 免费模型
+
+- 新增 `bin/pi-guard`：所有脚本都通过它调用 pi，只放行 `--provider openrouter` 加名字以 `:free` 结尾的模型（或 `openrouter/free`），拒绝 `--api-key`。
+- `pi-call.mjs`、`pi-task.mjs` 固定调用同目录的 `pi-guard`，不再读 `PI_BIN`。
+- 默认模型从 `deepseek/deepseek-flash` 改为 `openrouter/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free`（`pi-run` 和 `pi-task`）。
+- 认证：把 OpenRouter key 放在环境变量 `OPENROUTER_API_KEY` 或 `~/.pi/agent/auth.json` 的 `openrouter` 项。建议在 OpenRouter 后台把这个 key 的额度上限设为 0。
+- pi 包已改名为 `@earendil-works/pi-coding-agent`（旧的 `@mariozechner/pi-coding-agent` 已弃用）。

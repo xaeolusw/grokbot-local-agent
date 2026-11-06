@@ -16,7 +16,7 @@ if (!cwdArg || !modelArg || !rest.length) { console.error("usage: pi-call.mjs <c
 const [provider, ...idp] = modelArg.split("/");
 const web = noWeb ? "" : ",web_search,fetch_content,get_search_content"; // pi-web-access extension tools
 const tools = (allowWrite ? "read,grep,find,ls,bash,edit,write" : "read,grep,find,ls") + web;
-const child = spawn(process.env.PI_BIN || "pi",
+const child = spawn(new URL("./pi-guard", import.meta.url).pathname,
   ["--mode", "rpc", ...(sessionName ? ["--session-dir", sessionDir, "--session-id", sessionName, "--name", sessionName] : ["--no-session"]), "--provider", provider, "--model", idp.join("/"), "--thinking", thinking, "--tools", tools],
   { cwd: resolve(cwdArg), stdio: ["pipe", "pipe", verbose ? "inherit" : "pipe"] });
 let stderr = ""; child.stderr?.on("data", (d) => { stderr += d; });

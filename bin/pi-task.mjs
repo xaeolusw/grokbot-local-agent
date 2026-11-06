@@ -22,9 +22,9 @@ import { join, resolve } from "node:path";
 const TASK_ROOT = resolve(process.env.PI_TASK_DIR || join(homedir(), ".pi", "tasks"));
 const SESSION_DIR =
   process.env.PI_TASK_SESSION_DIR || join(homedir(), ".pi", "agent", "sessions", "tasks");
-const PI_BIN = process.env.PI_BIN || "pi";
+const PI_BIN = new URL("./pi-guard", import.meta.url).pathname;
 
-const DEFAULT_MODEL = "deepseek/deepseek-flash";
+const DEFAULT_MODEL = "openrouter/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free";
 const DEFAULT_THINKING = "high";
 const DEFAULT_TIMEOUT = 300; // seconds, same default as pi-call.mjs
 const EVENT_TEXT_MAX = 500;
@@ -1019,7 +1019,7 @@ env:
   PI_TASK_DIR          task store (default ~/.pi/tasks)
   PI_TASK_SESSION_DIR  Pi session dir (default ~/.pi/agent/sessions/tasks)
   PI_TASK_OWNER        default owner for run (fallback when --owner is absent)
-  PI_BIN               pi executable (default: pi)
+  (pi is always called through ./pi-guard, which only allows OpenRouter :free models)
 `;
 
 async function main() {

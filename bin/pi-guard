@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Guard in front of real pi: only provider openrouter with :free models (or openrouter/free).
+prov=""; model=""; prev=""
+for a in "$@"; do
+  case "$prev" in --provider) prov="$a";; --model) model="$a";; esac
+  case "$a" in --provider=*) prov="${a#*=}";; --model=*) model="${a#*=}";; --api-key|--api-key=*) echo "pi-guard: --api-key not allowed" >&2; exit 2;; esac
+  prev="$a"
+done
+if [ "$prov" != "openrouter" ] || { [[ "$model" != *":free" ]] && [ "$model" != "openrouter/free" ]; }; then
+  echo "pi-guard: only OpenRouter free models allowed (got provider=$prov model=$model)" >&2; exit 2
+fi
+exec "${PI_REAL_BIN:-pi}" "$@"
